@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RFT / GVU Correction App (Verified)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { background-color: #111; color: #eee; font-family: Arial, sans-serif; padding: 20px; }
+        h1 { color: #00ffcc; }
+        label, input, button, div { font-size: 16px; margin-top: 10px; width: 100%; }
+        input, button { padding: 10px; box-sizing: border-box; }
+        button { background-color: #00ffcc; color: #000; font-weight: bold; border: none; cursor: pointer; }
+        .section { padding: 20px; margin-top: 20px; background: #222; border-left: 4px solid #00ffcc; }
+    </style>
+</head>
+<body>
+
+<h1>RFT / GVU Correction App</h1>
+
+<div class="section">
+    <label for="lyInput">Enter Distance (light-years):</label>
+    <input type="number" id="lyInput" value="2500000">
+    <button onclick="correctDistance()">Calculate Correction</button>
+    <div id="results" style="margin-top:20px;">
+        <p><strong>GVU Equivalent:</strong> <span id="gvuOutput"></span></p>
+        <p><strong>RFT-Corrected Distance:</strong> <span id="rftOutput"></span> light-years</p>
+        <p><strong>Deviation from Claimed:</strong> <span id="errorOutput"></span>%</p>
+    </div>
+</div>
+
+<script>
+    const LIGHT_YEAR_KM = 9.46e12;
+    const GVU_KM = 0.00246 * LIGHT_YEAR_KM;
+
+    function correctDistance() {
+        const ly = parseFloat(document.getElementById("lyInput").value);
+        if (!ly || ly <= 0) {
+            alert("Please enter a valid number.");
+            return;
+        }
+        const gvu = (ly * LIGHT_YEAR_KM) / GVU_KM;
+        const rft = ly / 5;
+        const deviation = ((ly - rft) / ly) * 100;
+
+        document.getElementById("gvuOutput").innerText = gvu.toFixed(2) + " GVUs";
+        document.getElementById("rftOutput").innerText = rft.toFixed(2);
+        document.getElementById("errorOutput").innerText = deviation.toFixed(2);
+    }
+
+    // Run automatically on load with default value
+    window.onload = correctDistance;
+</script>
+
+</body>
+</html>
